@@ -3,15 +3,16 @@ module.exports = (io, socket, onlineUsers, channels) => {
   socket.on('new user', (username) => {
     onlineUsers[username] = socket.id;
     socket["username"] = username;
-    console.log(`${username} has joined the chat! ✋`);
     // Send the username to all clients currently connected
     io.emit("new user", username);
   });
 
   // Listen for "new message" socket emits
   socket.on('new message', (data) => {
-    console.log(`🎤 ${data.sender}: ${data.message} 🎤`);
-    io.emit("new message", data);
+    // Save
+    channels[data.channel].push({ sender: data.sender, message: data.message });
+    // Emit
+    io.to(data.channel).emit("new message", data);
   });
 
   socket.on('get online users', () => {

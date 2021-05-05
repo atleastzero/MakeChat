@@ -19,10 +19,15 @@ $(document).ready(() => {
 
   $('#send-chat-btn').click((e) => {
     e.preventDefault();
+    let chn = $('.channel-current').text();
     let msg = $('#chat-input').val();
     if (msg.length > 0) {
       // Emit new message to the server
-      socket.emit('new message', { sender: currentUser, message: msg });
+      socket.emit('new message', {
+        sender: currentUser,
+        message: msg,
+        channel: channel
+      });
       $('#chat-input').val("");
     }
   });
@@ -37,8 +42,6 @@ $(document).ready(() => {
   });
 
   socket.on('new user', (username) => {
-    console.log(`✋ ${username} has joined the chat! ✋`);
-
     currentUser = username;
 
     // Add the new user to the online users div
@@ -46,14 +49,14 @@ $(document).ready(() => {
   });
 
   socket.on('new message', (data) => {
-    console.log(`🎤 ${data.sender}: ${data.message} 🎤`);
-
-    // Add the new user to the online users div
-    $('.message-container').append(`
-      <div class="message">
-        <p class="message-user">${data.sender}: </p>
-        <p class="message-text">${data.message}</p>
-      </div>`);
+    let currentChannel = $('.channel-current').text();
+    if (currentChannel == data.channel) {
+      $('.message-container').append(`
+        <div class="message">
+          <p class="message-user">${data.sender}: </p>
+          <p class="message-text">${data.message}</p>
+        </div>`);
+    }
   });
 
   socket.on('get online users', (onlineUsers) => {
