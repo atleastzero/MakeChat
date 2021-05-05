@@ -1,0 +1,17 @@
+{
+  "name": "makechat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Megan Obryan",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-handlebars": "^5.3.1",
+    "mongoose": "^5.12.7",
+    "socket.io": "^4.0.1"
+  }
+}
