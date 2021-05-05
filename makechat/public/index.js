@@ -5,6 +5,11 @@ $(document).ready(() => {
 
   socket.emit('get online users');
 
+  $(document).on('click', '.channel', (e) => {
+    let newChannel = e.target.textContent;
+    socket.emit('user changed channel', newChannel)
+  })
+
   $('#create-user-btn').click((e) => {
     e.preventDefault();
     let username = $('#username-input').val();
