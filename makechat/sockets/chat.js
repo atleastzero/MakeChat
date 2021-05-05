@@ -3,6 +3,7 @@ module.exports = (io, socket, onlineUsers, channels) => {
   socket.on('new user', (username) => {
     onlineUsers[username] = socket.id;
     socket["username"] = username;
+
     // Send the username to all clients currently connected
     io.emit("new user", username);
   });

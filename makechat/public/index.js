@@ -5,6 +5,7 @@ $(document).ready(() => {
 
   socket.emit('get online users');
   socket.emit('get all channels');
+  socket.emit('user changed channel', "General");
 
   $(document).on('click', '.channel', (e) => {
     let newChannel = e.target.textContent;
@@ -13,10 +14,10 @@ $(document).ready(() => {
 
   $('#create-user-btn').click((e) => {
     e.preventDefault();
-    let username = $('#username-input').val();
-    if (username.length > 0) {
+    currentUser = $('#username-input').val();
+    if (currentUser.length > 0) {
       // Emit to the server the new user
-      socket.emit('new user', username);
+      socket.emit('new user', currentUser);
       $('.username-form').remove();
       // Show the main page
       $('.main-container').css('display', 'flex');
@@ -48,8 +49,6 @@ $(document).ready(() => {
   });
 
   socket.on('new user', (username) => {
-    currentUser = username;
-
     // Add the new user to the online users div
     $('.users-online').append(`<div class="user-online">${username}</div>`);
   });
