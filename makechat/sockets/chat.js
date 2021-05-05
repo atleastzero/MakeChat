@@ -17,10 +17,14 @@ module.exports = (io, socket, onlineUsers) => {
   socket.on('get online users', () => {
     // Send over the onlineUsers
     socket.emit('get online users', onlineUsers);
-  })
+  });
+
+  socket.on('new channel', (newChannel) => {
+    console.log(newChannel);
+  });
 
   socket.on('disconnect', () => {
     delete onlineUsers[socket.username];
     io.emit('user has left', onlineUsers);
-  })
+  });
 }
