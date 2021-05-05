@@ -20,6 +20,10 @@ module.exports = (io, socket, onlineUsers, channels) => {
     socket.emit('get online users', onlineUsers);
   });
 
+  socket.on('get all channels', () => {
+    socket.emit('get all channels', channels);
+  });
+
   socket.on('new channel', (newChannel) => {
     //Save the new channel to our channels object. The array will hold the messages.
     channels[newChannel] = [];
@@ -34,16 +38,16 @@ module.exports = (io, socket, onlineUsers, channels) => {
     });
   });
 
-  socket.on('disconnect', () => {
-    delete onlineUsers[socket.username];
-    io.emit('user has left', onlineUsers);
-  });
-
   socket.on('user changed channel', (newChannel) => {
     socket.join(newChannel);
     socket.emit('user changed channel', {
       channel: newChannel,
       messages: channels[newChannel]
     });
+  });
+
+  socket.on('disconnect', () => {
+    delete onlineUsers[socket.username];
+    io.emit('user has left', onlineUsers);
   });
 }

@@ -4,6 +4,7 @@ $(document).ready(() => {
   let currentUser;
 
   socket.emit('get online users');
+  socket.emit('get all channels');
 
   $(document).on('click', '.channel', (e) => {
     let newChannel = e.target.textContent;
@@ -31,7 +32,7 @@ $(document).ready(() => {
       socket.emit('new message', {
         sender: currentUser,
         message: msg,
-        channel: channel
+        channel: chn
       });
       $('#chat-input').val("");
     }
@@ -68,6 +69,14 @@ $(document).ready(() => {
     for (let username in onlineUsers) {
       $('.users-online').append(`<div class="user-online">${username}</div>`)
     }
+  });
+
+  socket.on('get all channels', (channels) => {
+    for (channel in channels) {
+      $('.channels').append(`<div class="channel">${channel}</div>`);
+    }
+    $('.channel').first().addClass('channel-current');
+    $('.channel-current').removeClass('channel');
   });
 
   socket.on('user has left', (onlineUsers) => {
